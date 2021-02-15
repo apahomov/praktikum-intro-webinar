@@ -6,7 +6,7 @@
 
 Копируем `.env_example` файлы в аналогичные `.env`
 
-**В файле `bot.env` не хватает ключа, его можно получить через BotFather**
+**В файле `bot.env` не хватает ключа, его можно получить через BotFather** - https://core.telegram.org/bots#6-botfather
 
 ## Старт
 
