@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  elastic:
+    image: elasticsearch:7.10.1
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ports:
+      - 127.0.0.1:9200:9200
+      - 127.0.0.1:9300:9300
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+
+  api:
+    build:
+      dockerfile: api.Dockerfile
+      context: .
+    env_file:
+      - ./api.env
+    ports:
+      - 127.0.0.1:${API_PORT:-8080}:${API_PORT:-8080}
+    command: python api.py
+    volumes:
+      - ./api/:/api/
+    depends_on:
+      - elastic
+
+  bot:
+    build:
+      dockerfile: bot.Dockerfile
+      context: .
+    env_file:
+      - ./bot.env
+    command: python bot.py
+    volumes:
+      - ./bot:/bot
+    depends_on:
+      - api
+      - elastic
+
+
+volumes:
+    elasticsearch-data:
